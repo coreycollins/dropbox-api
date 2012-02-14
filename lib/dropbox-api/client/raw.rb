@@ -14,7 +14,7 @@ module Dropbox
         root = options[:root] == false ? '' : "options[:root] ||= '#{Dropbox::API::Config.mode}'"
         self.class_eval <<-STR
           def #{options[:as] || action}(options = {})
-            #{root}
+            options[:root]= #{root}
             request(:#{options[:endpoint] || 'main'}, :#{method}, "#{action}", options)
           end
         STR
