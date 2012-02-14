@@ -11,10 +11,10 @@ module Dropbox
 
       def self.add_method(method, action, options = {})
         # Add the default root bit, but allow it to be disabled by a config option
-        root = options[:root] ||= Dropbox::API::Config.mode
+        root = Dropbox::API::Config.mode
         self.class_eval <<-STR
           def #{options[:as] || action}(options = {})
-            options[:root]= #{root}
+            options[:root] = #{root}
             request(:#{options[:endpoint] || 'main'}, :#{method}, "#{action}", options)
           end
         STR
@@ -26,7 +26,7 @@ module Dropbox
         connection.send(method, endpoint, action, data)
       end
 
-      add_method :get,  "/account/info",           :as => 'account', :root => false
+      add_method :get,  "/account/info",           :as => 'account'
 
       add_method :get,  "/metadata/:root/:path",   :as => 'metadata'
       add_method :get,  "/revisions/:root/:path",  :as => 'revisions'
